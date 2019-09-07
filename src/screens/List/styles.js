@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
+import { Animated, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -61,7 +61,7 @@ export const DestinationView = styled.View`
   margin: 0 36px;
 `;
 export const DestinationItemView = styled.View`
-  flex: 1;
+  flex: 2;
   flex-direction: row;
 `;
 export const DestinationsText = styled.Text``;
@@ -70,6 +70,7 @@ export const DBackground = styled.ImageBackground.attrs({
 })`
   flex: 1;
   width: ${width - 36 * 2};
+  height: ${width * 0.6};
   margin: 0 36px;
   padding: 36px;
 `;
@@ -105,7 +106,8 @@ export const DestinationInfo = styled.View`
   bottom: -36px;
   right: 36px;
   left: 36px;
-  box-shadow: 0px 1px 4px black;
+  box-shadow: 0px 1px 3px grey;
+  shadow-radius: 4px;
   background-color: white;
   z-index: 3;
   overflow: visible;
@@ -118,11 +120,107 @@ export const DInfoTitle = styled.Text`
 `;
 
 export const DInfoDesc = styled.Text`
-  color: #667;
+  color: #999;
+`;
+
+// Dots
+export const Dots = styled(Animated.View)`
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  border-width: 2.5;
+  margin: 0 6px;
+  background-color: #dce0e9;
+  border-color: transparent;
+`;
+
+export const ContainerDots = styled.View`
+  flex: 1;
+  justify-content: center;
+  margin-top: ${36 * 2}px;
+  align-content: center;
+  flex-direction: row;
 `;
 
 // Recommended
-export const RecommendedView = styled.View`
-  padding: 36px;
+export const RecommendedContainer = styled.View`
+  flex: 1;
+  flex-direction: column;
+  padding: 0 8px;
 `;
-export const RecommendedText = styled.Text``;
+
+export const RecommendedView = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 10px;
+`;
+export const RTitle = styled.Text`
+  font-size: 18px;
+`;
+
+export const RMore = styled.Text`
+  color: #999;
+  font-size: 20px;
+`;
+
+export const RRView = styled.View`
+  flex-direction: column;
+  width: ${width * 0.43};
+  padding: 15px;
+`;
+
+export const RList = styled.FlatList.attrs({
+  horizontal: true,
+  pagingEnabled: true,
+  scrollEnabled: true,
+  scrollEventThrottle: 16,
+  showsHorizontalScrollIndicator: false,
+  snapToAlignment: 'center',
+})``;
+
+export const RBackground = styled.ImageBackground.attrs({
+  imageStyle: {
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+  },
+})`
+  flex: 1;
+  box-shadow: 0px 1px 3px grey;
+  shadow-radius: 4px;
+  width: ${(width - 25 * 2) / 2};
+  height: ${(width - 36 * 2) / 2};
+`;
+
+export const RFooter = styled.View`
+  flex: 0.3;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin-bottom: 36px;
+  padding: 18px;
+`;
+
+export const RContainer = styled.View`
+  justify-content: space-between;
+  flex-direction: row;
+`;
+
+export const RFooterTitle = styled.Text`
+  font-size: 18px;
+  font-weight: 500;
+  padding-bottom: 8px;
+`;
+
+export const RFooterTemp = styled.Text`
+  color: white;
+`;
+export const RFooterSave = styled.Text`
+  color: white;
+`;
+export const RFooterDesc = styled.Text`
+  color: #999;
+`;
+
+export const RFooterRating = styled.Text`
+  color: #007bfa;
+`;

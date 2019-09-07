@@ -1,35 +1,63 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { StyleSheet, Animated, Dimensions } from 'react-native';
 
 import {
   Container,
   ContainerColumn,
   ContainerRating,
   ContainerHeader,
+  ContainerDots,
+  RecommendedContainer,
   SearchText,
   Title,
   Avatar,
   Articles,
   RenderContainer,
   DestinationsText,
-  RecommendedText,
+  RTitle,
+  RMore,
+  RRView,
   Scroll,
   DestinationView,
   UserImage,
   UserName,
   UserLocation,
   ItemRating,
+  Dots,
   DestinationItemView,
   DestinationInfo,
   DBackground,
+  RBackground,
   DInfoTitle,
   DInfoDesc,
   RecommendedView,
+  RFooter,
+  RContainer,
+  RFooterDesc,
+  RFooterTitle,
+  RList,
+  RFooterTemp,
+  RFooterSave,
+  RFooterRating,
 } from './styles';
 
 import { mocks } from './mocks';
 
+const width = Dimensions.get('screen');
+
+const styles = StyleSheet.create({
+  activeDots: {
+    borderColor: '#007bfa',
+    borderWidth: 2.5,
+    width: 12.5,
+    height: 12.5,
+    borderRadius: 6.25,
+  },
+});
+
 export default class List extends React.Component {
+  scrollX = new Animated.Value(0);
+
   static navigationOptions = {
     header: (
       <ContainerHeader>
@@ -44,14 +72,41 @@ export default class List extends React.Component {
     ),
   };
 
+  renderDots() {
+    const { destinations } = this.props;
+    const dotPosition = Animated.divide(this.scrollX, width);
+    return (
+      <ContainerDots>
+        {destinations.map((item, index) => {
+          const opacity = dotPosition.interpolate({
+            inputRange: [index - 1, index, index + 1],
+            outputRange: [0, 3, 0],
+            extrapolate: 'clamp',
+          });
+          return (
+            <Dots
+              key={`step-${item.id}`}
+              style={[styles.activeDots, { borderWidth: this.opacity }]}
+            />
+          );
+        })}
+      </ContainerDots>
+    );
+  }
+
   renderDestinations = () => {
     const { destinations } = this.props;
+
     return (
       <RenderContainer>
         <Scroll
           data={destinations}
+          decelerationRate={0}
           style={{ overflow: 'visible' }}
           keyExtractor={(item, index) => `${item.id}`}
+          onScroll={Animated.event([
+            { nativeEvent: { contentOffset: { x: this.scrollX } } },
+          ])}
           renderItem={({ item }) => this.renderDestination(item)}
         >
           <DestinationView>
@@ -66,6 +121,7 @@ export default class List extends React.Component {
             <DestinationsText>Destination 3</DestinationsText>
           </DestinationView>
         </Scroll>
+        {this.renderDots()}
       </RenderContainer>
     );
   };
@@ -96,12 +152,51 @@ export default class List extends React.Component {
   };
 
   renderRecommended = () => {
+    const { destinations } = this.props;
     return (
-      <RenderContainer>
+      <RecommendedContainer>
         <RecommendedView>
-          <RecommendedText>Recommended</RecommendedText>
+          <RTitle>Recommended</RTitle>
+          <RMore>More</RMore>
         </RecommendedView>
-      </RenderContainer>
+        <ContainerColumn>
+          <RList
+            data={destinations}
+            style={{ overflow: 'visible' }}
+            keyExtractor={(item, index) => `${item.id}`}
+            renderItem={({ item }) => this.renderRecommendation(item)}
+          />
+        </ContainerColumn>
+      </RecommendedContainer>
+    );
+  };
+
+  renderRecommendation = (item, index) => {
+    const { destinations } = this.props;
+    const isLastItem = index === destinations.length - 1;
+
+    return (
+      <RecommendedContainer
+        styles={
+          (index === 0 ? { marginLeft: 36 } : null,
+          isLastItem === 0 ? { marginRight: 36 } : null)
+        }
+      >
+        <RBackground source={{ uri: item.preview }}>
+          <RRView>
+            <RContainer>
+              <RFooterTemp>{item.temperature}℃</RFooterTemp>
+              <RFooterSave>{item.temperature}℃</RFooterSave>
+            </RContainer>
+          </RRView>
+        </RBackground>
+
+        <RFooter>
+          <RFooterTitle>{item.title}</RFooterTitle>
+          <RFooterDesc>{item.location}</RFooterDesc>
+          <RFooterRating>{item.rating}</RFooterRating>
+        </RFooter>
+      </RecommendedContainer>
     );
   };
 
