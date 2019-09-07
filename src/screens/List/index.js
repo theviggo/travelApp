@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Animated, Dimensions } from 'react-native';
+import { StyleSheet, Animated, Dimensions, View } from 'react-native';
 
 import {
   Container,
@@ -16,6 +16,7 @@ import {
   DestinationsText,
   RTitle,
   RMore,
+  Dots,
   RRView,
   Scroll,
   DestinationView,
@@ -23,13 +24,13 @@ import {
   UserName,
   UserLocation,
   ItemRating,
-  Dots,
   DestinationItemView,
   DestinationInfo,
   DBackground,
   RBackground,
   DInfoTitle,
   DInfoDesc,
+  ActiveDot,
   RecommendedView,
   RFooter,
   RContainer,
@@ -47,17 +48,24 @@ const width = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   activeDots: {
-    borderColor: '#007bfa',
-    borderWidth: 2.5,
     width: 12.5,
     height: 12.5,
     borderRadius: 6.25,
+    borderColor: '#007bfa',
+    backgroundColor: '#007bfa',
+  },
+  dots: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    borderWidth: 2.5,
+    marginHorizontal: 6,
+    backgroundColor: '#dce0e9',
+    borderColor: 'transparent',
   },
 });
 
 export default class List extends React.Component {
-  scrollX = new Animated.Value(0);
-
   static navigationOptions = {
     header: (
       <ContainerHeader>
@@ -72,21 +80,23 @@ export default class List extends React.Component {
     ),
   };
 
+  scrollX = new Animated.Value(0);
+
   renderDots() {
     const { destinations } = this.props;
     const dotPosition = Animated.divide(this.scrollX, width);
     return (
       <ContainerDots>
         {destinations.map((item, index) => {
-          const opacity = dotPosition.interpolate({
+          const borderWidth = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
-            outputRange: [0, 3, 0],
+            outputRange: [0, 2.5, 0],
             extrapolate: 'clamp',
           });
           return (
             <Dots
               key={`step-${item.id}`}
-              style={[styles.activeDots, { borderWidth: this.opacity }]}
+              style={item.id === 1 ? styles.activeDots : null}
             />
           );
         })}

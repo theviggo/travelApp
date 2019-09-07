@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { Animated, Dimensions } from 'react-native';
 
-const { width, height } = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 // Default
 export const Container = styled.View``;
@@ -132,6 +132,13 @@ export const Dots = styled(Animated.View)`
   margin: 0 6px;
   background-color: #dce0e9;
   border-color: transparent;
+`;
+
+export const ActiveDot = styled.View`
+  width: 12.5;
+  height: 12.5;
+  border-radius: 6.25;
+  border-color: '#007bfa';
 `;
 
 export const ContainerDots = styled.View`
